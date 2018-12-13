@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
     users_followed = models.ManyToManyField(
-        to="User", through="Following", through_fields=("following_user", "followed_user"), related_name="following") #Who the user is following
+        to="User", through="Following", through_fields=("following_user", "followed_user"), related_name="followers") #Who is following the user
 
 class Following(models.Model):
     following_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following_from")   #Who is doing the following
