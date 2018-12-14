@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main.models import Post, Comment
+from main.models import Post, Comment, User
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,8 +7,8 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ("id", "text", "date_posted")
 
 class PostSerializer(serializers.ModelSerializer):
-    owner = serializers.StringRelatedField() #Turns owner id into string
-    comments = CommentSerializer(many=True) #Turns comment id into JSON after creating a CommentSerializer
+    owner = serializers.SlugRelatedField(slug_field="username", read_only=True)                     #Assigns current user to Post
+    comments = CommentSerializer(many=True, required=False)                                         #Turns comment id into JSON after creating a CommentSerializer
     
     class Meta:
         model = Post

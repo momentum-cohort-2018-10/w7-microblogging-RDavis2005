@@ -6,11 +6,13 @@ from main.models import Post, Comment, User, Following
 class CommentInline(admin.StackedInline):
     model = Comment
     fields = ("text",)
+    extra = 2
 
 class FollowersInline(admin.StackedInline):
     model = Following
     fk_name = "followed_user"
     fields = ("following_user",)
+    extra = 2
 
 class UserAdmin(admin.ModelAdmin):
     fields = ("username", "email", "is_superuser", "is_staff", "is_active",)
