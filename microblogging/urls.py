@@ -19,5 +19,9 @@ from api import views as api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/posts/', api_views.post_create_or_list, name="api_post_list"),
+    path('api/posts/', api_views.PostListCreateView.as_view(), name="api_post_list"),
+    path('api/posts/<int:pk>/', api_views.PostRetrieveUpdateDestroyView.as_view(), name="api_post"),
+    path('api/users/', api_views.UserListView.as_view(), name="api_user_list"),
+    path('api/following/', api_views.FollowingListCreateView.as_view(), name="api_following_list"),
+    path('api/following/<str:username>/', api_views.FollowingDestroyView.as_view(), name="api_following"),
 ]

@@ -1,26 +1,53 @@
-from django.shortcuts import render
-from main.models import Post
-from api.serializers import PostSerializer
-from rest_framework.decorators import api_view
+from main.models import Post, Following, User
+from api.serializers import PostSerializer, FollowingSerializer, UserSerializer
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import generics
 
 # Create your views here.
-@api_view(["GET", "POST"])                              #If request is a GET, show user's post list
-def post_create_or_list(request):                       #If request is a POST, create a new post
-    if request.method == "POST":
-        return create_post(request)
-    return post_list(request)
 
+class PostListCreateView(APIView):                                              #Allows user ability to see all posts
+    def get(self, request):
+        posts = Post.objects.filter(owner=request.user)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
 
-def create_post(request):                               #Create a new post using the Post model
-    serializer = PostSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(owner=request.user)
-        return Response(serializer.data, status=201)
+    def post(self, request):                                                    #Allows user to create a new post
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)                                 #Turns data into actual book object
+            return Response(serializer.data, status=201)
 
-    return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=400)
 
-def post_list(request):                                 #Retrieve user's list of posts
-    posts = Post.objects.filter(owner=request.user)
-    serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)
+class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):     #Allows user ability to get, update or destroy a post
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return self.request.user.posts
+
+class FollowingListCreateView(APIView):                                         #Allows user to see a list of followed users
+    def get(self, request):
+        followings = Following.objects.filter(following_user=request.user)
+        serializer = FollowingSerializer(followings, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):                                                    #Allows user to create a new followed user
+        serializer = FollowingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(owner=request.user)                                 #Turns data into actual book object
+            return Response(serializer.data, status=201)
+
+        return Response(serializer.errors, status=400)
+
+class FollowingDestroyView(generics.DestroyAPIView):                            #Allows user ability to delete followed users by username
+    serializer_class = FollowingSerializer
+    lookup_field = "followed_user__username"
+    lookup_url_kwarg = "username"
+
+    def get_queryset(self):                                                     #Creates a query by that particular username and returns it
+        return self.request.user.follows_from
+
+class UserListView(generics.ListAPIView):                                       #Allows admin ability to see a list of all users
+    serializer_class =  UserSerializer
+    queryset = User.objects.all()
