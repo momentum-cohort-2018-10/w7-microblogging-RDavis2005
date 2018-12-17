@@ -6,6 +6,9 @@ class User(AbstractUser):
     users_followed = models.ManyToManyField(
         to="User", through="Following", through_fields=("following_user", "followed_user"), related_name="followers") #Who is following the user
 
+    # def is_authenticated(self):
+    #     return True
+
 class Following(models.Model):
     following_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following_from")   #Who is doing the following
     followed_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following_to")      #Who is being followed

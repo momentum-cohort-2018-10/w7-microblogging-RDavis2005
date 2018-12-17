@@ -1,0 +1,13 @@
+a {
+    text-decoration: none;
+    @apply text-teal;
+}
+
+.hero {
+    background-color: rgb(4, 182, 182);
+    background-size: cover;
+}
+
+.h-112 {
+    height: 28rem;
+  }

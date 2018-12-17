@@ -1,0 +1,38 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+    <script src="main.js"></script>
+</head>
+<body class="bg-grey-light font-sans">      
+    <div class="bg-white">
+        <div class="container mx-auto flex flex-col lg:flex-row items-center py-4">
+            <nav class="w-full lg:w-2/5">
+                <a href="#" class="text-grey-darker text-sm mr-4 font-semibold pb-6 border-b-2 border-solid border-transparent no-underline hover:text-teal hover:border-teal hover:no-underline"><i class="fa fa-home fa-lg"></i> Home</a>
+                <a href="#" class="text-grey-darker text-sm mr-4 font-semibold pb-6 border-b-2 border-solid border-transparent no-underline hover:text-teal hover:border-teal hover:no-underline"><i class="fa fa-bell fa-lg"></i> Mentions</a>
+                <a href="#" class="text-grey-darker text-sm mr-4 font-semibold pb-6 border-b-2 border-solid border-transparent no-underline hover:text-teal hover:border-teal hover:no-underline"><i class="fa fa-envelope fa-lg"></i> Messages</a>
+
+            </nav>
+            <div class="w-full lg:w-1/5 text-center my-4 lg:my-0"><a href="#"><i class="fa fa-twitter fa-lg text-blue"></i></a></div>
+            <div class="w-full lg:w-2/5 flex lg:justify-end">
+                <div class="mr-4 relative">
+                    <input type="text" class="bg-grey-lighter h-8 px-4 py-2 text-xs w-48 rounded-full" placeholder="Search Post-It App">
+                    <span class="flex items-center absolute pin-r pin-y mr-3"><i class="fa fa-search text-grey"></i></span>
+                </div>
+                <div class="mr-4"><a href="#"><img src="https://media.licdn.com/dms/image/C4E03AQGv0p8q2Xsu2Q/profile-displayphoto-shrink_200_200/0?e=1550707200&v=beta&t=aEQCVCKb9PNSXhU3jlKGDEQDrtjAIxX7S-cNVI_1jPQ" alt="avatar" class="h-8 w-8 rounded-full"></a></div>
+                <div><button class="bg-teal hover:bg-teal-dark text-white font-medium py-2 px-4 rounded-full">Post</button></div>
+            </div>
+        </div>
+    <main>
+    {% block main %}
+    {% endblock %}
+    </main>
+</body>
+</html>
