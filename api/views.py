@@ -1,8 +1,9 @@
 from main.models import Post, Following, User
-from api.serializers import PostSerializer, FollowingSerializer, UserSerializer
+from api.serializers import PostSerializer, FollowingSerializer, UserSerializer, CommentSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -25,6 +26,13 @@ class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):     
 
     def get_queryset(self):
         return self.request.user.posts
+
+class CommentCreateView(generics.CreateAPIView):                               #Allows user ability to create a new comment
+    serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):                                       #Finds a particular post by pk if it exists and returns it
+        post = get_object_or_404(Post, pk=self.kwargs["post_pk"])
+        serializer.save(post=post)
 
 class FollowingListCreateView(APIView):                                         #Allows user to see a list of followed users
     def get(self, request):
